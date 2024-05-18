@@ -1,27 +1,42 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
 public class MagicMachine {
 
     public static void main(String[] args) {
-
-        Scanner input = new Scanner(System.in);
-        int num = input.nextInt();
-        input.nextLine();
-        String str = input.nextLine();
-
-        int[][] a = new int[num][num];
-        Random r = new Random();
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[0].length; j++) {
-                a[i][j] = r.nextInt(5) + 1;
+        // test();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        String str = scanner.next();
+        int[][] array = new int[n][n];
+        Random rand = new Random();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                array[i][j] = rand.nextInt(5)  + 1;
             }
         }
-        System.out.println(magicMachine(num, a, str));
-        input.close();
+        System.out.println(magicMachineFunction(n, array, str));
 
+        scanner.close();
     }
 
+    private static void test() {
+        int n = 8;
+        String str = "qmiqwnhwnrckeirepjgv";
+        int[][] array = {
+                {2, 5, 5, 4, 2, 1, 5, 5 },
+                {2, 1, 2, 4, 4, 1, 5, 4 },
+                {4, 4, 1, 1, 1, 5, 1, 4 },
+                {4, 1, 4, 4, 1, 4, 5, 1 },
+                {1, 1, 1, 5, 1, 4, 4, 5 },
+                {4, 4, 5, 4, 5, 1, 5, 5 },
+                {1, 4, 4, 4, 1, 1, 1, 4 },
+                {4, 5, 4, 5, 5, 1, 4, 4 },
+        };
+        System.out.println(magicMachineFunction(n, array, str));
+    }
 
     /**
      * implement this method for creating a magic machine
@@ -30,11 +45,11 @@ public class MagicMachine {
      * @param input the input string
      * @return the output string of machine
      */
-    public static String magicMachine(int n, int[][] array, String input) {
+    public static String magicMachineFunction(int n, int[][] array, String input) {
         String[][][] inputs = new String[n][n][2];
         inputs[0][0][0] = input;
 
-
+        //greens
         for (int i = 0; i < n-1; i++) {
             inputs[i+1][0][0] = black(array[i][0], inputs[i][0][0]);
             inputs[i][1][1] = black(array[i][0], inputs[i][0][0]);
@@ -43,17 +58,17 @@ public class MagicMachine {
             inputs[0][i+1][1] = black(array[0][i], inputs[0][i][1]);
             inputs[1][i][0] = black(array[0][i], inputs[0][i][1]);
         }
-
+        //yellows
         inputs[n-1][1][1] = black(array[n-1][0], inputs[n-1][0][0]);
         inputs[1][n-1][0] = black(array[0][n-1], inputs[0][n-1][1]);
-
+        //blues
         for (int i = 1; i < n-1; i++) {
             for (int j = 1; j < n-1; j++) {
                 inputs[i+1][j][0] = black(array[i][j], inputs[i][j][0]);
                 inputs[i][j+1][1] = black(array[i][j], inputs[i][j][1]);
             }
         }
-
+        //pinks
         for (int i = 1; i < n-1; i++) {
             inputs[n-1][i+1][1] = white(array[n-1][i], inputs[n-1][i][1], inputs[n-1][i][0]);
             inputs[i+1][n-1][0] = white(array[i][n-1], inputs[i][n-1][1], inputs[i][n-1][0]);
@@ -61,7 +76,7 @@ public class MagicMachine {
         return white(array[n-1][n-1], inputs[n-1][n-1][1], inputs[n-1][n-1][0]);
     }
 
-    public static String black(int i, String input) {
+    private static String black(int i, String input) {
         switch (i) {
             case 1:
                 return black1(input);
@@ -78,7 +93,7 @@ public class MagicMachine {
         }
     }
 
-    public static String white(int i, String input1, String input2) {
+    private static String white(int i, String input1, String input2) {
         switch (i) {
             case 1:
                 return white1(input1, input2);
@@ -96,78 +111,68 @@ public class MagicMachine {
     }
 
 
-    public static String black1(String str) {
-        char[] charArray = str.toCharArray();
-
-        int left = 0;
-        int right = charArray.length - 1;
-        while (left < right) {
-            char temp = charArray[left];
-            charArray[left] = charArray[right];
-            charArray[right] = temp;
-            left++;
-            right--;
-        }
-
-        return new String(charArray);
-    }
-
-    public static String black2(String str) {
+    private static String black1(String input) {
         String output = "";
-        for (int i = 0; i < str.length(); i++) {
-            output = output + str.charAt(i) + str.charAt(i);
+        for (int i = 0; i < input.length(); i++) {
+            output = input.charAt(i) + output;
         }
         return output;
     }
 
-    public static String black3(String str) {
-        return str + str;
-    }
-
-    public static String black4(String str) {
-        return str.charAt(str.length()-1) + str.substring(0, str.length()-1);
-    }
-
-    public static String black5(String str) {
+    private static String black2(String input) {
         String output = "";
-        for (int i = 0; i < str.length(); i++) {
-            output = output + (char) ('z' - (str.charAt(i) - 'a'));
+        for (int i = 0; i < input.length(); i++) {
+            output = output + input.charAt(i) + input.charAt(i);
         }
         return output;
     }
 
-    public static String white1(String str1, String str2) {
+    private static String black3(String input) {
+        return input + input;
+    }
+
+    private static String black4(String input) {
+        return input.charAt(input.length()-1) + input.substring(0, input.length()-1);
+    }
+
+    private static String black5(String input) {
         String output = "";
-        for (int i = 0; i < str1.length(); i++) {
-            if (i < str2.length()) {
-                output = output + str1.charAt(i) + str2.charAt(i);
+        for (int i = 0; i < input.length(); i++) {
+            output = output + (char) ('z' - (input.charAt(i) - 'a'));
+        }
+        return output;
+    }
+
+    private static String white1(String input1, String input2) {
+        String output = "";
+        for (int i = 0; i < input1.length(); i++) {
+            if (i < input2.length()) {
+                output = output + input1.charAt(i) + input2.charAt(i);
             } else {
-                output = output + str1.charAt(i);
+                output = output + input1.charAt(i);
             }
         }
-        for (int i = str1.length(); i < str2.length(); i++) {
-            output = output + str2.charAt(i);
+        for (int i = input1.length(); i < input2.length(); i++) {
+            output = output + input2.charAt(i);
         }
         return output;
     }
 
-    public static String white2(String str1, String str2) {
-        String reversedstr2 = new StringBuilder(str2).reverse().toString();
-        return str1+reversedstr2;
-
+    private static String white2(String input1, String input2) {
+        return input1 + black1(input2);
     }
 
-    public static String white3(String str1, String str2) {
-        return white1(str1, black1(str2));
+    private static String white3(String input1, String input2) {
+        return white1(input1, black1(input2));
     }
 
-    public static String white4(String str1, String str2) {
-        if (str1.length() % 2 == 0)
-            return str1;
-        return str2;
+    private static String white4(String input1, String input2) {
+        if (input1.length() % 2 == 0)
+            return input1;
+        return input2;
     }
 
-    public static String white5(String input1, String input2) {
+    private static String white5(String input1, String input2) {
         String output = "";
         for (int i = 0; i < input1.length(); i++) {
             if (i < input2.length()) {
