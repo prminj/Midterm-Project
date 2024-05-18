@@ -34,7 +34,7 @@ public class MagicMachine {
         String[][][] inputs = new String[n][n][2];
         inputs[0][0][0] = input;
 
-        //greens
+
         for (int i = 0; i < n-1; i++) {
             inputs[i+1][0][0] = black(array[i][0], inputs[i][0][0]);
             inputs[i][1][1] = black(array[i][0], inputs[i][0][0]);
@@ -43,17 +43,17 @@ public class MagicMachine {
             inputs[0][i+1][1] = black(array[0][i], inputs[0][i][1]);
             inputs[1][i][0] = black(array[0][i], inputs[0][i][1]);
         }
-        //yellows
+
         inputs[n-1][1][1] = black(array[n-1][0], inputs[n-1][0][0]);
         inputs[1][n-1][0] = black(array[0][n-1], inputs[0][n-1][1]);
-        //blues
+
         for (int i = 1; i < n-1; i++) {
             for (int j = 1; j < n-1; j++) {
                 inputs[i+1][j][0] = black(array[i][j], inputs[i][j][0]);
                 inputs[i][j+1][1] = black(array[i][j], inputs[i][j][1]);
             }
         }
-        //pinks
+
         for (int i = 1; i < n-1; i++) {
             inputs[n-1][i+1][1] = white(array[n-1][i], inputs[n-1][i][1], inputs[n-1][i][0]);
             inputs[i+1][n-1][0] = white(array[i][n-1], inputs[i][n-1][1], inputs[i][n-1][0]);
@@ -152,7 +152,9 @@ public class MagicMachine {
     }
 
     public static String white2(String str1, String str2) {
-        return str1 + black1(str2);
+        String reversedstr2 = new StringBuilder(str2).reverse().toString();
+        return str1+reversedstr2;
+
     }
 
     public static String white3(String str1, String str2) {
