@@ -4,6 +4,8 @@ public class MagicMachine {
      */
     public static void main(String[] args) {
 
+
+    System.out.println("jsdfsjf");
     }
 
     /**
